@@ -1,36 +1,39 @@
-# Superstore 销售经营分析看板
+# 🛒 Superstore Sales Performance Analysis Dashboard
 
-基于 Superstore 订单数据构建的销售经营分析项目，使用 SQL 完成数据质量检查、销售与利润趋势分析、区域与品类分析、产品排名、折扣诊断等，并通过 Power BI 制作交互式看板呈现业务洞察。
+## 📖 项目背景 (Project Background)
+零售行业不仅关注销售额的增长，更关注利润的质量。本项目基于 Superstore 2014-2017 年的订单数据集，从**销售趋势、区域市场、品类结构、客户细分、折扣风险**以及**配送效率**等多个维度进行全面诊断。旨在通过数据驱动的方式，识别高增长业务线，定位亏损风险点，并为管理层提供可落地的经营策略。
 
-## 📁 项目文件说明
-- `Superstore_Orders_Data.CSV`：原始订单行级数据集。
-- `Superstore_Sales_Analysis.sql`：包含数据清洗、多维度聚合、窗口函数等核心分析代码。
-- `Superstore_Sales_Data_Analysis_xkx.pbix`：Power BI 本地看板源文件。
-- `dashboard-overview.png`：看板截图预览。
+## 📁 数据集说明 (Dataset Overview)
+数据来源于 `Superstore_Orders_Data.csv`，为订单行级数据（一行代表一个订单中的一个商品明细），包含约 9000+ 条记录与 21 个字段：
+- **时间维度**：`Order_Date` (下单日期), `Ship_Date` (发货日期)
+- **地理维度**：`Region` (区域), `State` (州), `City` (城市)
+- **产品维度**：`Category` (品类), `Sub_Category` (子品类), `Product_Name` (产品名称)
+- **财务指标**：`Sales` (销售额), `Profit` (利润), `Discount` (折扣), `Quantity` (销量)
+- **客户与物流**：`Segment` (客户细分), `Ship_Mode` (配送模式)
 
-## 📊 看板预览
+## 📊 看板预览 (Dashboard Preview)
+![Superstore Dashboard](dashboard-overview.png)
 
-![Superstore 销售经营分析看板](dashboard-overview.png)
+### 💡 核心业务洞察 (Key Insights)
+通过 Power BI 看板与 SQL 交叉分析，得出以下核心发现：
+1. **整体经营稳健，但利润率偏低**：2014-2017 累计销售额约 2.3M，总利润 286.4K，整体毛利率（Gross Margin）仅为 **12.47%**。同比增长（YTY）达 46.88%，业务规模仍在扩张。
+2. **折扣与利润强负相关**：通过"折扣-利润散点图"发现，当折扣率超过 **20%** 时，订单利润显著下滑，甚至出现大规模亏损（红色散点集中），高折扣促销策略需要严格限制。
+3. **区域与品类结构不均**：Standard Class 配送占比高达 59.12%；Consumer 客户群贡献了 50.56% 的销售额，是核心基本盘。部分子品类（如 Tables、Bookcases）虽销售额高，但受高折扣拖累，常年处于亏损边缘。
 
-## 💡 核心业务指标
-- **整体表现**：销售额约 2.3 百万，利润约 286.4 千，整体毛利率约 12.47%。
-- **增长趋势**：销售额同比（YTY）增长 46.88%，月度环比（MTM）增长 3.79%。
-- **配送模式**：Standard Class 销售占比最高约 59.12%。
-- **客户细分**：Consumer 占比约 50.56%，Corporate 约 30.74%，Home Office 约 18.7%。
-- **风险提示**：通过散点图发现，高折扣区间存在明显的利润亏损风险。
+## 🛠️ SQL 深度分析模块 (SQL Analysis Modules)
+项目中的 `Superstore_Sales_Analysis.sql` 包含了从数据清洗到高级分析的完整链路：
+- **数据质量检查**：检查空值、重复订单，确保数据口径准确。
+- **多维度聚合汇总**：使用 `GROUP BY` 对区域、品类、配送模式、客户细分进行销售与利润拆分。
+- **时间序列分析**：提取 Year/Month，并利用 `LAG()` 窗口函数计算月度销售**环比增长率（MoM Growth）**。
+- **产品盈亏诊断**：使用 `HAVING SUM(Profit) < 0` 精准筛选出所有"长年亏损"的黑名单产品。
+- **区域榜单排名**：结合 CTE 与 `RANK() OVER(PARTITION BY ...)` 计算各区域内销售额及利润 Top 1 的产品。
+- **折扣利润测算**：按折扣率分组，计算不同折扣区间下的平均利润，为定价策略提供依据。
 
-## 🔍 SQL 分析模块
-`Superstore_Sales_Analysis.sql` 脚本涵盖了以下高级分析：
-- **基础汇总**：按品类、区域、配送模式、客户细分统计销售、销量与利润。
-- **时间趋势**：年度与月度销售表现，使用 `LAG()` 窗口函数计算月度环比增长率。
-- **产品表现**：Top/Bottom 10 产品销售额与利润排名。
-- **区域排名**：使用 `RANK() OVER(PARTITION BY Region)` 找出各区域销售额/利润最高的产品。
-- **亏损诊断**：筛选负利润产品，分析折扣与利润的关联度。
-- **客户行为**：统计单次购买客户。
-
-## 🛠️ 工具与技术
-- **SQL** (SQL Server/MySQL)：数据清洗、聚合、CTE、窗口函数。
-- **Power BI**：数据建模、DAX指标计算、可视化图表设计。
-
----
-*Note: 项目看板为本地 .pbix 文件，可下载后本地查看。*
+## 🗂️ 项目文件结构 (File Structure)
+```text
+superstore-sales-dashboard/
+├── README.md                                     # 项目介绍文档
+├── Superstore_Orders_Data.CSV                    # 原始订单数据集
+├── Superstore_Sales_Analysis.sql                 # 完整SQL分析代码
+├── Superstore_Sales_Data_Analysis_xkx.pbix       # Power BI 本地看板文件
+└── dashboard-overview.png                        # 看板静态截图预览
