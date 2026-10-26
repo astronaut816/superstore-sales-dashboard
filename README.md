@@ -4,7 +4,7 @@
 
 ## 📁 项目文件说明
 - `Superstore_Orders_Data.CSV`：原始订单行级数据集。
-- `Superstore_Sales_Analysis.sql`：包含数据清洗、多维度聚合、窗口函数（LAG/RANK）等核心分析代码。
+- `Superstore_Sales_Analysis.sql`：包含数据清洗、多维度聚合、窗口函数等核心分析代码。
 - `Superstore_Sales_Data_Analysis_xkx.pbix`：Power BI 本地看板源文件。
 - `dashboard-overview.png`：看板截图预览。
 
@@ -15,7 +15,7 @@
 ## 💡 核心业务指标
 - **整体表现**：销售额约 2.3 百万，利润约 286.4 千，整体毛利率约 12.47%。
 - **增长趋势**：销售额同比（YTY）增长 46.88%，月度环比（MTM）增长 3.79%。
-- **配送模式**：Standard Class 销售占比最高（约 59.12%）。
+- **配送模式**：Standard Class 销售占比最高约 59.12%。
 - **客户细分**：Consumer 占比约 50.56%，Corporate 约 30.74%，Home Office 约 18.7%。
 - **风险提示**：通过散点图发现，高折扣区间存在明显的利润亏损风险。
 
